@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TabRemote</string>
+    <string name="title_remotecontrol_detail">RemoteControl Detail</string>
+    <string name="title_activity_add_remote">Add Remote</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
