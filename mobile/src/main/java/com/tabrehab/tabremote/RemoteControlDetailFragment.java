@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import com.tabrehab.tabremote.dummy.DummyContent;
+import com.tabrehab.tabremote.model.RemoteControl;
+import com.tabrehab.tabremote.model.RemoteControlList;
 
 /**
  * A fragment representing a single RemoteControl detail screen.
@@ -23,10 +24,8 @@ public class RemoteControlDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private DummyContent.DummyItem mItem;
+    private RemoteControlList mRemoteControlList;
+    private RemoteControl mRemoteControl;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,11 +38,14 @@ public class RemoteControlDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRemoteControlList = RemoteControlList.get(getActivity());
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            int remoteIndex = Integer.parseInt(
+                    getArguments().getString(ARG_ITEM_ID));
+            mRemoteControl = mRemoteControlList.getRemotes().get(remoteIndex);
         }
     }
 
@@ -53,8 +55,8 @@ public class RemoteControlDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_remotecontrol_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.remotecontrol_detail)).setText(mItem.content);
+        if (mRemoteControl != null) {
+            ((TextView)rootView.findViewById(R.id.remotecontrol_detail)).setText(mRemoteControl.getWidgetName());
         }
 
         return rootView;

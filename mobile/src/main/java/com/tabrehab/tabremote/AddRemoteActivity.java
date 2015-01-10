@@ -2,16 +2,17 @@ package com.tabrehab.tabremote;
 
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+
+import com.tabrehab.tabremote.model.RemoteControl;
+import com.tabrehab.tabremote.model.RemoteControlList;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -37,6 +38,7 @@ public class AddRemoteActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
         private String mCreateUrl;
+        private RemoteControlList mControlList;
 
         public static PlaceholderFragment newInstance(String createUrl) {
             PlaceholderFragment instance = new PlaceholderFragment();
@@ -50,6 +52,7 @@ public class AddRemoteActivity extends ActionBarActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+            mControlList = RemoteControlList.get(getActivity());
             setRetainInstance(true);
             new CreateRemoteTask().execute(mCreateUrl);
         }
@@ -61,15 +64,27 @@ public class AddRemoteActivity extends ActionBarActivity {
             return rootView;
         }
 
-        private class CreateRemoteTask extends AsyncTask<String, Void, String> {
+        private class CreateRemoteTask extends AsyncTask<String, Void, RemoteControl> {
             @Override
-            protected String doInBackground(String... url) {
+            protected RemoteControl doInBackground(String... params) {
+                String createUrl = params[0];
+                RemoteControlFetcher fetcher = new RemoteControlFetcher();
                 try {
-                    String result = new RemoteControlFetcher().create(url[0]);
+                    String remoteUrl = fetcher.create(createUrl);
+                    RemoteControl remoteControl = fetcher.fetch(remoteUrl);
+                    return remoteControl;
                 } catch (IOException e) {
+                    Log.e(TAG, "Failed to create remote", e);
+                } catch (JSONException e) {
                     Log.e(TAG, "Failed to create remote", e);
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(RemoteControl remoteControl) {
+                mControlList.getRemotes().add(remoteControl);
+                mControlList.save();
             }
         }
     }

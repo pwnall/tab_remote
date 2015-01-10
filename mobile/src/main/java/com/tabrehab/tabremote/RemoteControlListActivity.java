@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.tabrehab.tabremote.model.RemoteControlList;
+
 
 /**
  * An activity representing a list of RemoteControls. This activity
@@ -48,6 +50,7 @@ public class RemoteControlListActivity extends FragmentActivity
                     .findFragmentById(R.id.remotecontrol_list))
                     .setActivateOnItemClick(true);
         }
+
 
         // TODO: If exposing deep links into your app, handle intents here.
     }

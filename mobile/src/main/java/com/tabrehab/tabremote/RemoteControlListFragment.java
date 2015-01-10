@@ -8,7 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-import com.tabrehab.tabremote.dummy.DummyContent;
+import com.tabrehab.tabremote.model.RemoteControl;
+import com.tabrehab.tabremote.model.RemoteControlList;
 
 /**
  * A list fragment representing a list of RemoteControls. This fragment
@@ -20,6 +21,7 @@ import com.tabrehab.tabremote.dummy.DummyContent;
  * interface.
  */
 public class RemoteControlListFragment extends ListFragment {
+    private RemoteControlList mRemoteControlList;
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -71,12 +73,14 @@ public class RemoteControlListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRemoteControlList = RemoteControlList.get(getActivity());
+
         // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        setListAdapter(new ArrayAdapter<RemoteControl>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+                mRemoteControlList.getRemotes()));
     }
 
     @Override
@@ -116,7 +120,7 @@ public class RemoteControlListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(Integer.toString(position));
     }
 
     @Override
