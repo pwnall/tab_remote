@@ -1,15 +1,24 @@
 package com.tabrehab.tabremote;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
 import com.tabrehab.tabremote.model.RemoteControl;
 import com.tabrehab.tabremote.model.RemoteControlList;
+
+import org.json.JSONException;
+
+import java.io.IOException;
 
 /**
  * A fragment representing a single RemoteControl detail screen.
@@ -18,6 +27,8 @@ import com.tabrehab.tabremote.model.RemoteControlList;
  * on handsets.
  */
 public class RemoteControlDetailFragment extends Fragment {
+    private static final String TAG = "RemoteControlDetailFragment";
+
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -54,11 +65,43 @@ public class RemoteControlDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_remotecontrol_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+
+        TextView titleView = (TextView)rootView.findViewById(R.id.remotecontrol_detail_title);
+        ListView listView = (ListView)rootView.findViewById(R.id.remotecontrol_detail_list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Dispatch the command.
+                RemoteControl.Command command = mRemoteControl.getCommands().get(position);
+                String commandUrl = command.getUrl();
+                new SendCommandTask().execute(commandUrl);
+            }
+        });
         if (mRemoteControl != null) {
-            ((TextView)rootView.findViewById(R.id.remotecontrol_detail)).setText(mRemoteControl.getWidgetName());
+            getActivity().setTitle(mRemoteControl.toString());
+            titleView.setText(mRemoteControl.getWidgetName());
+            listView.setAdapter(new ArrayAdapter<RemoteControl.Command>(
+                    getActivity(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    mRemoteControl.getCommands()));
         }
 
         return rootView;
+    }
+
+    private class SendCommandTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            String commandUrl = params[0];
+            RemoteControlFetcher fetcher = new RemoteControlFetcher();
+            try {
+                fetcher.sendCommand(commandUrl);
+                return null;
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to send command", e);
+            }
+            return null;
+        }
     }
 }

@@ -1,9 +1,23 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           android:id="@+id/remotecontrol_detail"
           style="?android:attr/textAppearanceLarge"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:padding="16dp"
-          android:textIsSelectable="true"
-          tools:context=".RemoteControlDetailFragment"/>
+          android:orientation="vertical"
+          tools:context=".RemoteControlDetailFragment">
+
+    <TextView
+        android:id="@+id/remotecontrol_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="48sp"
+        android:layout_weight="0"
+        android:textSize="24sp" />
+
+    <ListView
+        android:id="@+id/remotecontrol_detail_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:drawSelectorOnTop="false"/>
+</LinearLayout>

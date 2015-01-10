@@ -47,6 +47,34 @@ public class RemoteControlFetcher {
     }
 
     /**
+     * Sends a command.
+     *
+     * @param commandUrl the command's URL
+     * @return true on success, false on failure
+     */
+    public boolean sendCommand(String commandUrl) throws IOException {
+        URL httpUrl = new URL(commandUrl);
+        HttpURLConnection connection =
+                (HttpURLConnection)httpUrl.openConnection();
+        try {
+            connection.setDoOutput(true);
+            connection.getOutputStream().close();
+            connection.getInputStream().close();
+
+            int httpResponse = connection.getResponseCode();
+            if (httpResponse != HttpURLConnection.HTTP_NO_CONTENT) {
+                Log.d(TAG, "Got error " + httpResponse + " from " + httpUrl);
+                return false;
+            }
+
+            return true;
+        } finally {
+            connection.disconnect();
+        }
+    }
+
+
+    /**
      * Performs a HTTP GET and returns the result as a String.
      * @param url the URL to be obtained
      * @return the returned result

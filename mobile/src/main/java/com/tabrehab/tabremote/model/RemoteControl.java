@@ -95,6 +95,11 @@ public class RemoteControl {
         public String getName() {
             return mName;
         }
+
+        @Override
+        public String toString() {
+            return mLabel;
+        }
     }
 
     public ArrayList<Command> getCommands() {
