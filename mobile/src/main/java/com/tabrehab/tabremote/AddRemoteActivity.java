@@ -85,6 +85,7 @@ public class AddRemoteActivity extends ActionBarActivity {
             protected void onPostExecute(RemoteControl remoteControl) {
                 mControlList.getRemotes().add(remoteControl);
                 mControlList.save();
+                getActivity().finish();
             }
         }
     }

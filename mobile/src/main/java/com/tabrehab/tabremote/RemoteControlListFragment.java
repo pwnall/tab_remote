@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 
@@ -81,6 +82,15 @@ public class RemoteControlListFragment extends ListFragment {
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 mRemoteControlList.getRemotes()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ListAdapter adapter = getListAdapter();
+        if (adapter != null) {
+            ((ArrayAdapter<RemoteControl>) adapter).notifyDataSetChanged();
+        }
     }
 
     @Override
