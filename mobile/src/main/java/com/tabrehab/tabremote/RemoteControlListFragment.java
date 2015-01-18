@@ -1,10 +1,17 @@
 package com.tabrehab.tabremote;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -73,6 +80,7 @@ public class RemoteControlListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         mRemoteControlList = RemoteControlList.get(getActivity());
 
@@ -85,12 +93,38 @@ public class RemoteControlListFragment extends ListFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.remote_control_list_menu, menu);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ListAdapter adapter = getListAdapter();
         if (adapter != null) {
             ((ArrayAdapter<RemoteControl>) adapter).notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_remotecontrol_list,
+                container, false);
+        Button addRemoteButton =
+                (Button)rootView.findViewById(R.id.button_add_remote);
+        if (addRemoteButton != null) {
+            addRemoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Activity activity = getActivity();
+                    Intent intent = new Intent(activity, AddRemoteActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+        }
+        return rootView;
     }
 
     @Override
@@ -139,6 +173,19 @@ public class RemoteControlListFragment extends ListFragment {
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             // Serialize and persist the activated item position.
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_remote:
+                Activity activity = getActivity();
+                Intent intent = new Intent(activity, AddRemoteActivity.class);
+                activity.startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

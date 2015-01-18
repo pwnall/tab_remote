@@ -2,8 +2,11 @@
 <resources>
 
     <string name="app_name">TabRemote</string>
-    <string name="title_remotecontrol_detail">RemoteControl Detail</string>
-    <string name="title_activity_add_remote">Add Remote</string>
+    <string name="title_remotecontrol_detail">Remote Control Details</string>
+    <string name="title_activity_add_remote">Add Remote Control</string>
+    <string name="menu_item_add_remote">Add Remote Control</string>
+    <string name="button_add_remote">Add Remote Control</string>
+    <string name="menu_item_remove_remote">Remove Remote</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 

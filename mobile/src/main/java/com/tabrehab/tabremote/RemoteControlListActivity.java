@@ -3,6 +3,7 @@ package com.tabrehab.tabremote;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.tabrehab.tabremote.model.RemoteControlList;
 
@@ -23,7 +24,7 @@ import com.tabrehab.tabremote.model.RemoteControlList;
  * {@link RemoteControlListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class RemoteControlListActivity extends FragmentActivity
+public class RemoteControlListActivity extends ActionBarActivity
         implements RemoteControlListFragment.Callbacks {
 
     /**
@@ -50,9 +51,6 @@ public class RemoteControlListActivity extends FragmentActivity
                     .findFragmentById(R.id.remotecontrol_list))
                     .setActivateOnItemClick(true);
         }
-
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
