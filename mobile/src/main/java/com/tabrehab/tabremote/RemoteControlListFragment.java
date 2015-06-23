@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-
 import com.tabrehab.tabremote.model.RemoteControl;
 import com.tabrehab.tabremote.model.RemoteControlList;
 

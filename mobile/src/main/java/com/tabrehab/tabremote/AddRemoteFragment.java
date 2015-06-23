@@ -1,8 +1,9 @@
 package com.tabrehab.tabremote;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class AddRemoteFragment extends Fragment {
     private RemoteControlList mControlList;
 
     public static final String CREATE_URL = "create_url";
+
+    private static final int REQUEST_SCAN_BARCODE = 0;
 
     public static AddRemoteFragment newInstance(String createUrl) {
         AddRemoteFragment instance = new AddRemoteFragment();
@@ -68,27 +71,38 @@ public class AddRemoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_remote, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_remote,
+                container, false);
         return rootView;
     }
 
-    /** Start the barcode scanner intent. */
+    /**
+     * Start the barcode scanner intent.
+     *
+     * If no barcode scanning activity is available, we point the user to the
+     * Google Play page of Google's barcode scanner.
+     */
     private void startBarcodeIntent() {
         Intent intent = new Intent("com.google.zxing.client.android.SCAN");
         intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-        try {
-            startActivityForResult(intent, 0);
-        } catch(ActivityNotFoundException e) {
-            Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
-            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
 
-            Toast toast = Toast.makeText(getActivity(),
-                    "We need Barcode Scanner to scan the remote code",
-                    Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-            startActivity(marketIntent);
+        PackageManager packageManager = getActivity().getPackageManager();
+        ComponentName scanActivity = intent.resolveActivity(packageManager);
+        if (scanActivity != null) {
+            startActivityForResult(intent, REQUEST_SCAN_BARCODE);
+            return;
         }
+
+        Uri marketUri = Uri.parse(
+                "market://details?id=com.google.zxing.client.android");
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+
+        Toast toast = Toast.makeText(getActivity(),
+                getString(R.string.app_store_barcode_prompt),
+                Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+        startActivity(marketIntent);
     }
 
     @Override
@@ -134,8 +148,13 @@ public class AddRemoteFragment extends Fragment {
             } else {
                 Intent intent = new Intent(activity,
                         RemoteControlListActivity.class);
-                activity.startActivity(intent);
+                startActivity(intent);
             }
+
+            Toast toast = Toast.makeText(getActivity(),
+                    activity.getString(R.string.toast_remote_control_added),
+                    Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 }

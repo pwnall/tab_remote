@@ -15,11 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
+import com.tabrehab.tabremote.model.RemoteCommand;
 import com.tabrehab.tabremote.model.RemoteControl;
 import com.tabrehab.tabremote.model.RemoteControlList;
-
-import org.json.JSONException;
 
 import java.io.IOException;
 
@@ -83,7 +81,7 @@ public class RemoteControlDetailFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Dispatch the command.
-                RemoteControl.Command command = mRemoteControl.getCommands().get(position);
+                RemoteCommand command = mRemoteControl.getCommands().get(position);
                 String commandUrl = command.getUrl();
                 new SendCommandTask().execute(commandUrl);
             }
@@ -91,7 +89,7 @@ public class RemoteControlDetailFragment extends Fragment {
         if (mRemoteControl != null) {
             getActivity().setTitle(mRemoteControl.getWidgetName());
             titleView.setText("on " + mRemoteControl.getDeviceName());
-            listView.setAdapter(new ArrayAdapter<RemoteControl.Command>(
+            listView.setAdapter(new ArrayAdapter<RemoteCommand>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,
                     android.R.id.text1,

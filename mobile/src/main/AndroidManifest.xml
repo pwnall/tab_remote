@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:exported="false"
             android:name=".RemoteControlDetailActivity"
             android:label="@string/title_remotecontrol_detail"
             android:parentActivityName=".RemoteControlListActivity" >
@@ -36,6 +37,10 @@
                 <data android:scheme="tabremote" />
             </intent-filter>
         </activity>
+        <provider
+            android:exported="false"
+            android:authorities="com.tabrehab.tabremote.provider"
+            android:name=".model.RemoteControlProvider" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

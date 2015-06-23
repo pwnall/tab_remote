@@ -2,8 +2,6 @@ package com.tabrehab.tabremote.model;
 
 import android.content.Context;
 
-import com.tabrehab.tabremote.model.RemoteControl;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
